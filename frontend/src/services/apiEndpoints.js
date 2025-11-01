@@ -1,4 +1,5 @@
-const URL = "http://localhost:3210/api/v1/";
+// const URLLocal = "http://localhost:3210/api/v1/";
+const URL = "https://final-year-project-krfa.onrender.com/api/v1/";
 
 export const loginURL = `${URL}user/login`;
 export const signupURL = `${URL}user/signup`;
