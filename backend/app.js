@@ -38,6 +38,11 @@ app.use("/api/v1/rooms", roomRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/bookings", bookingRouter);
 
+//Get req to root of this app
+app.use("/", (req, res, next) => {
+  res.status("200").send("Backend is running");
+});
+
 //Unknown Api Endpoints Error handler
 app.use((req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
