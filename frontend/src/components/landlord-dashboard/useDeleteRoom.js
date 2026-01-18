@@ -5,7 +5,6 @@ import { deleteRoomApi } from "../../services/apiRoom";
 
 export function useDeleteRoom() {
   const queryClient = useQueryClient();
-  console.log(queryClient);
   const [token] = useLocalStorageState(null, "auth-token");
 
   const {
@@ -16,7 +15,7 @@ export function useDeleteRoom() {
     mutationFn: async (id) => await deleteRoomApi(token, id),
     onSuccess: (id) => {
       queryClient.setQueryData(["rooms"], (old = []) =>
-        old.filter((room) => room.id !== id)
+        old.filter((room) => room.id !== id),
       );
 
       queryClient.invalidateQueries({

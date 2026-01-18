@@ -14,10 +14,13 @@ export const getLandlordStats = asyncHandler(async (req, res) => {
 
   const result = await Room.aggregate([
     {
-      $match: { landlordId: new mongoose.Types.ObjectId(landlordId) }, // only landlord's rooms
+      $match: {
+        landlordId: mongoose.Types.ObjectId.createFromHexString(landlordId),
+      }, // only landlord's rooms
     },
     {
       $group: {
+        _id: null, // put everything in a single document
         totalListings: { $sum: 1 }, // count total rooms
         totalViews: { $sum: "$views" }, // sum of all views
         bookedRooms: {

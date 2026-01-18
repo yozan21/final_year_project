@@ -99,7 +99,6 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     // Handle login logic here
-    console.log(data, isPending);
     const { email, password } = data;
     login({ email, password });
   };
