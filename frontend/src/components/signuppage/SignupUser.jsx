@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { Button } from "../../styles/buttons";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useSignup } from "../../authentication/useSignup";
 
 import SpinnerMini from "../../ui/SpinnerMini";
-import { useSignup } from "../../authentication/useSignup";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import LocationSelector from "../../features/location/LocationSelector";
 
 const Form = styled.form`
@@ -63,7 +63,7 @@ const Input = styled.input`
   padding: 0.9rem 1rem;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background: var(--surfaceAlt);
+  background: var(--background);
   color: var(--text);
   font-size: 1rem;
   transition: border 0.2s;
@@ -71,12 +71,6 @@ const Input = styled.input`
     border-color: var(--primary);
     outline: none;
   }
-`;
-
-const Error = styled.span`
-  color: #e74c3c;
-  font-size: 0.97rem;
-  margin-top: 0.1rem;
 `;
 
 const ShowPasswordBtn = styled.button`
@@ -94,32 +88,39 @@ const ShowPasswordBtn = styled.button`
   }
 `;
 
-const SignupUser = () => {
+const Error = styled.p`
+  color: #e74c3c;
+  font-size: 0.97rem;
+  margin-top: 0.1rem;
+  &::first-letter {
+    text-transform: uppercase;
+  }
+`;
+
+const SignupLandlord = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [address, setAddress] = useState({});
 
-  const { signup, isPending } = useSignup();
-
+  const { signup, isPending, fieldErrors } = useSignup();
   const {
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
-    // Handle signup logic here
+    // Handle landlord signup logic here
     const {
-      fName,
-      lName,
+      name,
       phone,
       email,
       phoneSecond = "",
       password,
       confirmPassword,
     } = data;
-    const name = `${fName} ${lName}`;
     const role = "client";
 
     signup({
@@ -134,34 +135,30 @@ const SignupUser = () => {
     });
   };
 
+  useEffect(() => {
+    if (!fieldErrors) return;
+    Object.entries(fieldErrors).forEach(([field, message]) => {
+      setError(field, { type: "server", message });
+    });
+  }, [fieldErrors, setError]);
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <Title>Sign Up</Title>
+      <Title>Landlord Sign Up</Title>
       <Grid>
         <FormGroup>
-          <Label htmlFor="fName">First Name</Label>
+          <Label htmlFor="name">Your Name*</Label>
           <Input
-            id="fName"
+            id="name"
             type="text"
-            placeholder="First Name"
-            {...register("fName", { required: "First name is required" })}
+            placeholder="Jon Doe"
+            {...register("name", { required: "Full name is required" })}
           />
-          {errors.fName && <Error>{errors.fName.message}</Error>}
+          {errors.name && <Error>{errors.name.message}</Error>}
         </FormGroup>
+
         <FormGroup>
-          <Label htmlFor="lName">Last Name</Label>
-          <Input
-            id="lName"
-            type="text"
-            placeholder="Last Name"
-            {...register("lName", { required: "lName is required" })}
-          />
-          {errors.lName && <Error>{errors.lName.message}</Error>}
-        </FormGroup>
-      </Grid>
-      <Grid>
-        <FormGroup>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">Email*</Label>
           <Input
             id="email"
             type="email"
@@ -177,13 +174,13 @@ const SignupUser = () => {
           />
           {errors.email && <Error>{errors.email.message}</Error>}
         </FormGroup>
-        <FullWidth>
-          <LocationSelector value={address} onChange={setAddress} required />
-        </FullWidth>
       </Grid>
+      <FullWidth>
+        <LocationSelector value={address} onChange={setAddress} required />
+      </FullWidth>
       <Grid>
         <FormGroup>
-          <Label htmlFor="phone">Phone Number</Label>
+          <Label htmlFor="phone">Phone Number*</Label>
           <Input
             id="phone"
             type="tel"
@@ -216,7 +213,7 @@ const SignupUser = () => {
       </Grid>
       <Grid>
         <FormGroup>
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">Password*</Label>
           <Input
             id="password"
             type={showPassword ? "text" : "password"}
@@ -239,7 +236,7 @@ const SignupUser = () => {
           {errors.password && <Error>{errors.password.message}</Error>}
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label htmlFor="confirmPassword">Confirm Password*</Label>
           <Input
             id="confirmPassword"
             type={showConfirmPassword ? "text" : "password"}
@@ -266,6 +263,7 @@ const SignupUser = () => {
           )}
         </FormGroup>
       </Grid>
+
       <Button type="submit" disabled={isPending}>
         {isPending ? <SpinnerMini /> : "Sign Up"}
       </Button>
@@ -273,4 +271,4 @@ const SignupUser = () => {
   );
 };
 
-export default SignupUser;
+export default SignupLandlord;

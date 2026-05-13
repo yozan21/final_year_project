@@ -15,7 +15,12 @@ import bookingRouter from "./routes/bookingRoutes.js";
 const app = express();
 
 //CORS issues
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  }),
+);
 
 //REQUEST LOGGER
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));

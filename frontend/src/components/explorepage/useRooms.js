@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getRoomsApi } from "../../services/apiRoom";
-import { useLocalStorageState } from "../../hooks/useLocalStorageState";
 
 export function useRooms() {
-  const [token] = useLocalStorageState(null, "auth-token");
   const {
     data: rooms,
     isPending,
@@ -12,11 +10,8 @@ export function useRooms() {
   } = useQuery({
     queryKey: ["rooms"],
     queryFn: async () => {
-      if (!token) return null;
-      return await getRoomsApi(token);
+      return await getRoomsApi();
     },
-    enabled: !!token,
-    retry: false,
   });
 
   return { rooms, isPending, error, isError };

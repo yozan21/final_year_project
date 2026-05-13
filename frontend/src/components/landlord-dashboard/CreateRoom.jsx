@@ -92,11 +92,12 @@ const CreateRoom = () => {
   const [structuredLocation, setStructuredLocation] = useState({});
   const [coordinates, setCoordinates] = useState(null);
 
-  const { createRoom, isPending } = useCreateRoom();
+  const { createRoom, isPending, fieldErrors } = useCreateRoom();
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
     setValue,
     reset,
@@ -202,10 +203,6 @@ const CreateRoom = () => {
       }
     });
 
-    for (const pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
     createRoom(formData);
   };
 
@@ -218,6 +215,13 @@ const CreateRoom = () => {
         value && value.length > 0 ? true : "At least one image is required",
     });
   }, [register]);
+
+  useEffect(() => {
+    if (!fieldErrors) return;
+    Object.entries(fieldErrors).forEach(([field, message]) => {
+      setError(field, { type: "server", message });
+    });
+  }, [fieldErrors, setError]);
 
   return (
     <CreateRoomContainer>

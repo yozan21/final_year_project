@@ -1,12 +1,8 @@
-import axios from "axios";
 import { getAdminStatsURL } from "./apiEndpoints";
+import api from "./axios";
 
-export const getAdminStats = async (token) => {
-  const { data } = await axios.get(getAdminStatsURL, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const getAdminStats = async () => {
+  const { data } = await api.get(getAdminStatsURL);
 
   return data.data.data;
 };

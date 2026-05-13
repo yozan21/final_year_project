@@ -1,13 +1,13 @@
-import axios from "axios";
 import { currentUserURL, loginURL, logoutURL, signupURL } from "./apiEndpoints";
+import api from "./axios";
 
 export const loginApi = async ({ email, password }) => {
-  const { data } = await axios.post(loginURL, { email, password });
+  const { data } = await api.post(loginURL, { email, password });
   return data;
 };
 
 export const logoutApi = async () => {
-  const { data } = await axios.post(logoutURL);
+  const { data } = await api.post(logoutURL);
   return data;
 };
 
@@ -21,7 +21,7 @@ export const signupApi = async ({
   confirmPassword,
   role,
 }) => {
-  const { data } = await axios.post(signupURL, {
+  const { data } = await api.post(signupURL, {
     name,
     email,
     phone,
@@ -34,12 +34,8 @@ export const signupApi = async ({
   return data;
 };
 
-export const getCurrentUserApi = async (token) => {
-  const { data } = await axios.get(currentUserURL, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const getCurrentUserApi = async () => {
+  const { data } = await api.get(currentUserURL);
 
   return data.data.data;
 };

@@ -292,8 +292,12 @@ export const Button = styled.button`
   }
 `;
 
-export const ErrorMessage = styled.span`
+export const ErrorMessage = styled.p`
   color: #ef4444;
   font-size: 0.85rem;
   margin-top: 0.25rem;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
 `;

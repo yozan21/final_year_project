@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { useLocalStorageState } from "../../hooks/useLocalStorageState";
 import { getNearbyRoomsApi, getRoomsInBoundsApi } from "../../services/apiRoom";
+import { getToken } from "../../hooks/tokenStore";
 
 export function useNearbyRooms(coordinates) {
-  const [token] = useLocalStorageState(null, "auth-token");
-
+  const token = getToken();
   const { data: rooms = [], isPending } = useQuery({
     queryKey: ["rooms-nearby", coordinates],
-    queryFn: () => getNearbyRoomsApi(token, coordinates),
+    queryFn: () => getNearbyRoomsApi(coordinates),
     enabled: !!token && !!coordinates?.lat && !!coordinates?.lng,
     retry: false,
   });
@@ -16,11 +15,11 @@ export function useNearbyRooms(coordinates) {
 }
 
 export function useRoomsInBounds(bounds, filters) {
-  const [token] = useLocalStorageState(null, "auth-token");
+  const token = getToken();
 
   const { data: rooms = [], isPending } = useQuery({
     queryKey: ["rooms-map", bounds, filters],
-    queryFn: () => getRoomsInBoundsApi(token, { bounds, filters }),
+    queryFn: () => getRoomsInBoundsApi({ bounds, filters }),
     enabled: !!token && !!bounds,
     retry: false,
   });

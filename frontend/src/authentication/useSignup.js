@@ -1,13 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signupApi } from "../services/apiAuth";
 import { useNavigate } from "react-router-dom";
-import { useLocalStorageState } from "../hooks/useLocalStorageState";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import { setToken } from "../hooks/tokenStore";
 
 export const useSignup = () => {
+  const [fieldErrors, setFieldErrors] = useState();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [_, setToken] = useLocalStorageState(null, "auth-token");
 
   const { mutate: signup, isPending } = useMutation({
     mutationFn: ({
@@ -32,15 +33,19 @@ export const useSignup = () => {
       }),
     onSuccess: (user) => {
       queryClient.setQueryData(["user"], user.data.user);
-      setToken(`Bearer ${user.token}`);
+      setToken(user.token);
       navigate(user.data.user.role === "client" ? "/" : "/landlord-dashboard");
       toast.success(`Signed up as ${user.data.user.role}. Welcome!!`);
     },
     onError: (e) => {
-      toast.error(e.response?.data?.message || "Something went wrong!");
-      console.log("Error:", e.response);
+      const { errors, message } = e.response?.data || {};
+      if (errors) {
+        setFieldErrors(errors); // { email: "...", name: "..." }
+      } else {
+        toast.error(message || "Something went wrong!");
+      }
     },
   });
 
-  return { signup, isPending };
+  return { signup, isPending, fieldErrors };
 };

@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocalStorageState } from "../hooks/useLocalStorageState";
 import { useNavigate } from "react-router-dom";
 import { logoutApi } from "../services/apiAuth";
+import { clearToken } from "../hooks/tokenStore";
 
 export function useLogout() {
-  const [, setToken] = useLocalStorageState(null, "auth-token");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -12,7 +11,7 @@ export function useLogout() {
     mutationFn: logoutApi,
     onSuccess: () => {
       // Clear token
-      setToken(null);
+      clearToken();
       localStorage.removeItem("auth-token");
 
       // Update auth-related cache without forcing a full page reload.

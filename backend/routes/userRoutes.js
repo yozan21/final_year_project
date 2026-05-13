@@ -11,13 +11,15 @@ router.post("/signup", authController.signup);
 
 router.post("/logout", authController.logout);
 
+router.post("/refresh", authController.refresh);
+
 router.use(authController.protect);
 router.route("/me").get(userController.getMe, userController.getUser);
 router
   .route("/landlordStats")
   .get(
     authController.restrictTo("landlord", "admin"),
-    userController.getLandlordStats
+    userController.getLandlordStats,
   );
 router
   .route("/adminStats")

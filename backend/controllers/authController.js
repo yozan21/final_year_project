@@ -5,21 +5,34 @@ import { promisify } from "util";
 import User from "../models/UserModel.js";
 import AppError from "../utils/AppError.js";
 
-const signToken = (id) =>
-  jwt.sign({ id: id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
+const signAccessToken = (id) =>
+  jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
+  });
+
+const signRefreshToken = (id) =>
+  jwt.sign({ id }, process.env.JWT_REFRESH_SECRET, {
+    expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
   });
 
 const createSendToken = (user, code, req, res) => {
-  const token = signToken(user.id);
+  const accessToken = signAccessToken(user.id);
+  const refreshToken = signRefreshToken(user.id);
+
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
+    maxAge:
+      Number.parseInt(process.env.JWT_COOKIE_EXPIRES_IN) * 24 * 60 * 60 * 1000, // 7 days
+  });
+
   user.password = undefined;
 
   res.status(code).json({
     status: "success",
-    token,
-    data: {
-      user,
-    },
+    token: accessToken, // renamed from token
+    data: { user },
   });
 };
 
@@ -50,6 +63,25 @@ export const login = asyncHandler(async (req, res, next) => {
   createSendToken(user, 200, req, res);
 });
 
+export const refresh = asyncHandler(async (req, res, next) => {
+  const token = req.cookies.refreshToken;
+  if (!token) return next(new AppError("No refresh token", 401)); // 403 not 401
+
+  try {
+    const decoded = await promisify(jwt.verify)(
+      token,
+      process.env.JWT_REFRESH_SECRET,
+    );
+    const user = await User.findById(decoded.id);
+    if (!user) return next(new AppError("User no longer exists!", 401));
+
+    const accessToken = signAccessToken(user.id);
+    res.json({ accessToken });
+  } catch (err) {
+    return next(new AppError("Invalid or expired refresh token", 401));
+  }
+});
+
 export const protect = asyncHandler(async (req, res, next) => {
   let token;
   if (
@@ -77,8 +109,8 @@ export const protect = asyncHandler(async (req, res, next) => {
     return next(
       new AppError(
         "User recently changed the password. Please login again!",
-        401
-      )
+        401,
+      ),
     );
 
   //Grant access to the protected route
@@ -91,7 +123,7 @@ export const restrictTo =
   (req, res, next) => {
     if (!roles.includes(req.user.role))
       return next(
-        new AppError("You don't have permission to perform this action!", 403)
+        new AppError("You don't have permission to perform this action!", 403),
       );
 
     next();

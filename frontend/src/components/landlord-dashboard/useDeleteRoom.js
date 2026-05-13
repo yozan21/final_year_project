@@ -1,18 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { useLocalStorageState } from "../../hooks/useLocalStorageState";
 import { deleteRoomApi } from "../../services/apiRoom";
 
 export function useDeleteRoom() {
   const queryClient = useQueryClient();
-  const [token] = useLocalStorageState(null, "auth-token");
 
   const {
     mutate: deleteRoom,
     isPending,
     isSuccess,
   } = useMutation({
-    mutationFn: async (id) => await deleteRoomApi(token, id),
+    mutationFn: async (id) => await deleteRoomApi(id),
     onSuccess: (id) => {
       queryClient.setQueryData(["rooms"], (old = []) =>
         old.filter((room) => room.id !== id),

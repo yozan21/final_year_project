@@ -24,14 +24,18 @@ const handleCastErrorDB = (err) => {
 };
 
 const handleDuplicateFieldsDB = (err) => {
-  const message = `Duplicate field value: ${err.keyValue.name}. Please use another value!`;
-  return new AppError(message, 400);
+  const field = Object.keys(err.keyValue)[0];
+  const appError = new AppError("Duplicate field value", 400);
+  appError.errors = { [field]: `${field} already exists.` };
+  return appError;
 };
 
 const handleValidationErrorDB = (err) => {
-  const errors = Object.values(err.errors).map((el) => el.message);
-  const message = `Invalid input data. ${errors.join(". ")}`;
-  return new AppError(message, 400);
+  const appError = new AppError("Invalid input data", 400);
+  appError.errors = Object.fromEntries(
+    Object.entries(err.errors).map(([key, val]) => [key, val.message]),
+  );
+  return appError;
 };
 
 const handleJwtError = () =>
@@ -48,6 +52,7 @@ const sendDevError = (err, req, res) => {
     message: err.message,
     stack: err.stack,
     error: err,
+    errors: err.errors || null,
   });
 };
 const sendProdError = (err, req, res) => {
@@ -58,6 +63,7 @@ const sendProdError = (err, req, res) => {
       return res.status(err.statusCode).json({
         status: err.status,
         message: err.message,
+        errors: err.errors || null,
       });
     }
     // Programming or other unknown error: don't leak error details
@@ -65,8 +71,14 @@ const sendProdError = (err, req, res) => {
     return res.status(500).json({
       status: "error",
       message: "Something went very wrong!",
+      errors: err.errors || null,
     });
   }
+
+  console.error(`Error💥: ${err}`);
+  return res
+    .status(err.statusCode)
+    .json({ status: "error", message: "Something went wrong" });
 };
 
 export default async (err, req, res, next) => {
@@ -90,6 +102,9 @@ export default async (err, req, res, next) => {
     // Production error handling
     let error = copyError(err);
     if (error.name === "CastError") error = handleCastErrorDB(error);
+    if (error.name === "MulterError") {
+      error = new AppError(`Upload error: ${error.message}`, 400);
+    }
     if (error.code === 11000) {
       error = handleDuplicateFieldsDB(error);
     }

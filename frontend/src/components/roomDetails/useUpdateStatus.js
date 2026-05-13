@@ -1,15 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateRoomStatusApi } from "../../services/apiRoom";
-import { useLocalStorageState } from "../../hooks/useLocalStorageState";
 import toast from "react-hot-toast";
 
 export function useUpdateStatus() {
   const queryClient = useQueryClient();
-  const [token] = useLocalStorageState(null, "auth-token");
-
   const { mutate: updateStatus, isPending } = useMutation({
-    mutationFn: async ({ id, status }) =>
-      await updateRoomStatusApi(token, id, status),
+    mutationFn: async ({ id, status }) => await updateRoomStatusApi(id, status),
 
     onSuccess: (room) => {
       queryClient.invalidateQueries({
