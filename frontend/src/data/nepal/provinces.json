@@ -1,0 +1,9 @@
+[
+  { "province_id": 1, "name": "Koshi Pradesh", "shortName": "Koshi" },
+  { "province_id": 2, "name": "Madhesh Pradesh", "shortName": "Madhesh" },
+  { "province_id": 3, "name": "Bagmati Pradesh", "shortName": "Bagmati" },
+  { "province_id": 4, "name": "Gandaki Pradesh", "shortName": "Gandaki" },
+  { "province_id": 5, "name": "Lumbini Pradesh", "shortName": "Lumbini" },
+  { "province_id": 6, "name": "Karnali Pradesh", "shortName": "Karnali" },
+  { "province_id": 7, "name": "Sudurpashchim Pradesh", "shortName": "Sudurpashchim" }
+]
