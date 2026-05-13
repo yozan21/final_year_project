@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useUI } from "../context/UIContext.jsx";
 import { FaMoon, FaSun } from "react-icons/fa";
-import { FiHome, FiLogOut, FiSearch } from "react-icons/fi";
+import { FiHome, FiLogOut, FiMapPin, FiSearch } from "react-icons/fi";
 import { Button } from "../styles/buttons";
 import { Link, NavLink } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
@@ -174,6 +174,10 @@ const Navbar = ({ showBrand = true }) => {
             <NavBarLink to="/explore">
               <FiSearch />
               <span>Explore</span>
+            </NavBarLink>
+            <NavBarLink to="/explore-map">
+              <FiMapPin />
+              Map explore
             </NavBarLink>
           </>
         )}

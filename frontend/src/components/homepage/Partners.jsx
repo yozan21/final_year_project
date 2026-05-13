@@ -9,13 +9,13 @@ const partners = [
   },
   {
     name: "Khalti",
-    src: "https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/6a6b6f44401011.581198398388c.jpg",
+    src: "./partnerLogos/Khalti_Digital_Wallet_Logo.png.jpg",
   },
-  { name: "IME Pay" },
-  { name: "ConnectIPS" },
-  { name: "Nabil Bank" },
-  { name: "NIC Asia" },
-  { name: "Prabhu Pay" },
+  { name: "IME Pay", src: "./partnerLogos/IME-Pay-Logo_white.jpg" },
+  { name: "ConnectIPS", src: "./partnerLogos/connect-ips.png" },
+  { name: "Prabhu Pay", src: "./partnerLogos/prabhuPay.png" },
+  { name: "CG Pay", src: "./partnerLogos/cgPay.jpg" },
+  { name: "Namaste Pay", src: "./partnerLogos/namastePay-1.jpg" },
 ];
 
 const PartnerWrap = styled(Section)`
@@ -59,12 +59,20 @@ const MarqueeMask = styled.div`
 
   &::before {
     left: 0;
-    background: linear-gradient(90deg, ${({ theme }) => theme.background}, transparent);
+    background: linear-gradient(
+      90deg,
+      ${({ theme }) => theme.background},
+      transparent
+    );
   }
 
   &::after {
     right: 0;
-    background: linear-gradient(270deg, ${({ theme }) => theme.background}, transparent);
+    background: linear-gradient(
+      270deg,
+      ${({ theme }) => theme.background},
+      transparent
+    );
   }
 
   @media (max-width: 760px) {

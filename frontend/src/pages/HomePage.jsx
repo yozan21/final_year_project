@@ -4,11 +4,13 @@ import FeaturedRooms from "../components/homepage/FeaturedRooms";
 import Partners from "../components/homepage/Partners";
 import Testimonials from "../components/homepage/Testimonials";
 import Footer from "../components/homepage/Footer";
+import MapShowcase from "../components/homepage/MapShowcase";
 
 const HomePage = () => (
   <>
     <HeroSection />
     <FeaturedRooms />
+    <MapShowcase />
     <Partners />
     <Testimonials />
     <Footer />

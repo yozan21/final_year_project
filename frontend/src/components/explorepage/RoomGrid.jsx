@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Card } from "../../ui";
 import { motion } from "framer-motion";
@@ -11,13 +11,12 @@ import formatCurrency from "../../utils/formatCurrency";
 import { FiClock, FiHome, FiMapPin, FiShield, FiWifi } from "react-icons/fi";
 import { formatSmartDate } from "../../utils/formatSmartDate";
 import { useRooms } from "./useRooms";
-import Spinner from "../../ui/Spinner";
-import SpinnerContainer from "../../ui/SpinnerContainer";
 import ExploreFilters from "./ExploreFilters";
 import ListingMap from "./ListingMap";
-import { useNearbyRooms } from "./useMapRooms";
 import { NEPAL_CENTER } from "../../features/location/locationUtils";
 import ExploreSkeleton from "./ExploreSkeleton";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { useRoomsInBounds } from "./useMapRooms";
 
 const ExploreShell = styled.div`
   display: grid;
@@ -36,7 +35,7 @@ const ExploreShell = styled.div`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
   gap: 1.25rem;
   margin-bottom: 2.5rem;
 `;
@@ -192,6 +191,17 @@ const MapLink = styled.button`
   color: #fff;
   font-weight: 800;
   cursor: pointer;
+  opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+`;
+
+const MapLinkOutline = styled(MapLink)`
+  background: transparent;
+  border: 1px solid ${({ theme }) => theme.border};
+  color: ${({ theme }) => theme.text};
 `;
 
 const getRoomId = (room) => room.id || room._id;
@@ -247,21 +257,25 @@ const matchesFilters = (room, filters) => {
 const RoomGrid = ({ filters, setFilters }) => {
   const navigate = useNavigate();
   const { rooms, isPending, isError } = useRooms();
-  const [currentLocation, setCurrentLocation] = useState(null);
-  const { rooms: nearbyRooms } = useNearbyRooms(currentLocation);
+  const [center, setCenter] = useState(NEPAL_CENTER);
+  const [bounds, setBounds] = useState(null);
+  const debouncedBounds = useDebouncedValue(bounds, 650);
+  const { mapRooms } = useRoomsInBounds(debouncedBounds, {});
+  const [locating, setLocating] = useState(false);
+  const [isNearMe, setIsNearMe] = useState(false);
 
-  useEffect(() => {
+  const handleFindNearMe = () => {
+    setLocating(true);
     navigator.geolocation?.getCurrentPosition(
-      (position) =>
-        setCurrentLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          radius: 10,
-        }),
-      () => setCurrentLocation(null),
+      (pos) => {
+        setCenter([pos.coords.latitude, pos.coords.longitude]);
+        setIsNearMe(true);
+        setLocating(false);
+      },
+      () => setLocating(false),
       { enableHighAccuracy: true, timeout: 7000 },
     );
-  }, []);
+  };
 
   if (isPending) return <ExploreSkeleton />;
 
@@ -273,13 +287,7 @@ const RoomGrid = ({ filters, setFilters }) => {
     );
   }
 
-  const sourceRooms = nearbyRooms.length ? nearbyRooms : rooms;
-  const filteredRooms = sourceRooms.filter((room) =>
-    matchesFilters(room, filters),
-  );
-  const mapCenter = currentLocation
-    ? [currentLocation.lat, currentLocation.lng]
-    : NEPAL_CENTER;
+  const filteredRooms = rooms.filter((room) => matchesFilters(room, filters));
 
   return (
     <ExploreShell>
@@ -287,9 +295,7 @@ const RoomGrid = ({ filters, setFilters }) => {
       <main>
         <ResultsMeta>
           <span>{filteredRooms.length} rooms</span>
-          {currentLocation && nearbyRooms.length
-            ? "Near your location"
-            : "Match your search"}
+          Match your search
         </ResultsMeta>
         <Grid>
           {filteredRooms.map((room) => (
@@ -350,17 +356,25 @@ const RoomGrid = ({ filters, setFilters }) => {
           ))}
         </Grid>
       </main>
+
       <MapPanel>
         <MapTitle>
-          <h2>{currentLocation ? "Rooms Near You" : "Map Preview"}</h2>
+          <h2>{isNearMe ? "Rooms Near You" : "Kathmandu Area"}</h2>
           <span>Real listing pins</span>
         </MapTitle>
         <ListingMap
-          rooms={filteredRooms}
-          center={mapCenter}
+          rooms={mapRooms}
+          center={center}
+          onBoundsChange={setBounds}
+          height="460px"
           minHeight="460px"
         />
-        <MapLink onClick={() => navigate("/explore/map")}>
+        {!isNearMe && (
+          <MapLink onClick={handleFindNearMe} disabled={locating}>
+            {locating ? "Locating..." : "📍 Find rooms near me"}
+          </MapLink>
+        )}
+        <MapLink onClick={() => navigate("/explore-map")}>
           Open full map search
         </MapLink>
       </MapPanel>

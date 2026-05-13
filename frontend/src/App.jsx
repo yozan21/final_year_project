@@ -96,7 +96,7 @@ function App() {
                 }
               >
                 <Route path="/explore" element={<Explore />} />
-                <Route path="/explore/map" element={<ExploreMap />} />
+                <Route path="/explore-map" element={<ExploreMap />} />
                 <Route path="/room/:id" element={<RoomDetails />} />
                 <Route path="/booking/:id" element={<BookingRoom />} />
               </Route>

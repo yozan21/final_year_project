@@ -1,6 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 import L from "leaflet";
 import { useNavigate } from "react-router-dom";
 import formatCurrency from "../../utils/formatCurrency";
@@ -24,6 +31,14 @@ const MapWrap = styled.div`
 const PopupCard = styled.div`
   min-width: 210px;
 
+  img {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+  }
+
   h3 {
     font-size: 1rem;
     margin-bottom: 0.35rem;
@@ -37,9 +52,16 @@ const PopupCard = styled.div`
 
 const pinIcon = L.divIcon({
   className: "",
-  html: `<div style="width:34px;height:34px;border-radius:999px;background:#FE6218;border:3px solid white;box-shadow:0 12px 24px rgba(254,98,24,.35);"></div>`,
-  iconSize: [34, 34],
-  iconAnchor: [17, 17],
+  html: `
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">
+      <path d="M16 0C7.163 0 0 7.163 0 16c0 10 16 24 16 24S32 26 32 16C32 7.163 24.837 0 16 0z"
+        fill="#FE6218" stroke="white" stroke-width="2"/>
+      <circle cx="16" cy="16" r="6" fill="white"/>
+    </svg>
+  `,
+  iconSize: [32, 40],
+  iconAnchor: [16, 40], // tip of the pin
+  popupAnchor: [0, -40],
 });
 
 const getRoomId = (room) => room.id || room._id;
@@ -53,22 +75,24 @@ function BoundsReporter({ onBoundsChange }) {
   const map = useMapEvents({
     moveend() {
       const bounds = map.getBounds();
+      const pad = 0.3; // ~30% buffer outside viewport
       onBoundsChange?.({
-        north: bounds.getNorth(),
-        south: bounds.getSouth(),
-        east: bounds.getEast(),
-        west: bounds.getWest(),
+        north: bounds.getNorth() + pad,
+        south: bounds.getSouth() - pad,
+        east: bounds.getEast() + pad,
+        west: bounds.getWest() - pad,
       });
     },
   });
 
   useEffect(() => {
     const bounds = map.getBounds();
+    const pad = 0.3; // ~30% buffer outside viewport
     onBoundsChange?.({
-      north: bounds.getNorth(),
-      south: bounds.getSouth(),
-      east: bounds.getEast(),
-      west: bounds.getWest(),
+      north: bounds.getNorth() + pad,
+      south: bounds.getSouth() - pad,
+      east: bounds.getEast() + pad,
+      west: bounds.getWest() - pad,
     });
   }, [map, onBoundsChange]);
 
@@ -89,6 +113,12 @@ function ListingMap({ rooms = [], center, onBoundsChange, height, minHeight }) {
   const navigate = useNavigate();
   const mapCenter = center || NEPAL_CENTER;
 
+  const [visibleRooms, setVisibleRooms] = useState([]);
+
+  useEffect(() => {
+    if (rooms?.length) setVisibleRooms(rooms); // only replace when new data arrives
+  }, [rooms]);
+
   return (
     <MapWrap $height={height} $minHeight={minHeight}>
       <MapContainer center={mapCenter} zoom={center ? 13 : 7} scrollWheelZoom>
@@ -98,20 +128,25 @@ function ListingMap({ rooms = [], center, onBoundsChange, height, minHeight }) {
         />
         <BoundsReporter onBoundsChange={onBoundsChange} />
         <Recenter center={center} />
-        {rooms.map((room) => {
+        {visibleRooms.map((room) => {
           const position = getRoomPosition(room);
           if (!position) return null;
           return (
             <Marker key={getRoomId(room)} position={position} icon={pinIcon}>
               <Popup>
                 <PopupCard>
+                  {room.thumbnail?.url && (
+                    <img src={room.thumbnail.url} alt={room.title} />
+                  )}
                   <h3>{room.title}</h3>
                   <p>
                     {room.structuredLocation?.localLevel || room.area},{" "}
                     {room.structuredLocation?.district || room.location}
                   </p>
                   <strong>{formatCurrency(room.price)} / month</strong>
-                  <DetailsBtn onClick={() => navigate(`/room/${getRoomId(room)}`)}>
+                  <DetailsBtn
+                    onClick={() => navigate(`/room/${getRoomId(room)}`)}
+                  >
                     Details
                   </DetailsBtn>
                 </PopupCard>
