@@ -79,7 +79,11 @@ const RoomGallery = ({ photos }) => {
     <GalleryWrapper>
       <ImageRow onClick={handleClick}>
         {visiblePhotos?.map((photo, idx) => (
-          <Image key={idx} src={getPhotoSrc(photo)} alt={`Room photo ${idx + 1}`} />
+          <Image
+            key={idx}
+            src={getPhotoSrc(photo)}
+            alt={`Room photo ${idx + 1}`}
+          />
         ))}
 
         {!showAll && photos?.length > 3 && (

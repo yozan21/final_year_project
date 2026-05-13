@@ -76,7 +76,7 @@ export const updateRoomStatusApi = async (token, id, status) => {
       headers: {
         Authorization: token,
       },
-    }
+    },
   );
   return data.data.data;
 };

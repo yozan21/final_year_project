@@ -127,7 +127,9 @@ const FeaturedRooms = () => {
                   </Chip>
                 </LandlordRow>
                 <H3 style={{ marginBottom: "0.2rem" }}>{room.title}</H3>
-                <p style={{ color: "var(--mutedText)", marginBottom: "0.2rem" }}>
+                <p
+                  style={{ color: "var(--mutedText)", marginBottom: "0.2rem" }}
+                >
                   <FiMapPin /> {room.area}, {room.location}
                 </p>
                 <ChipRow>

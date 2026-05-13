@@ -208,10 +208,10 @@ export default function EditRoom() {
         .map((info) => formData.append("additionalInfo", info.trim()));
     }
     data.amenities.map((amenity) =>
-      formData.append("amenities", amenity.trim())
+      formData.append("amenities", amenity.trim()),
     );
     customAmenities.map((amenity) =>
-      formData.append("amenities", amenity.trim())
+      formData.append("amenities", amenity.trim()),
     );
     // Append thumbnail (if it's a File object)
     if (data.thumbnail instanceof File) {
@@ -254,13 +254,13 @@ export default function EditRoom() {
             file: true,
             preview: img.url,
           };
-        })
+        }),
       );
       setIsOpenCustomAdder(
-        room.amenities?.some((amenity) => !amenities.includes(amenity))
+        room.amenities?.some((amenity) => !amenities.includes(amenity)),
       );
       setCustomAmenities(
-        room.amenities?.filter((amenity) => !amenities.includes(amenity))
+        room.amenities?.filter((amenity) => !amenities.includes(amenity)),
       );
       setStructuredLocation(room.structuredLocation || {});
       if (room.geoLocation?.coordinates?.length === 2) {
@@ -398,7 +398,9 @@ export default function EditRoom() {
           <SectionTitle>Exact Map Pin *</SectionTitle>
           <MapPicker value={coordinates} onChange={setCoordinates} />
           {!coordinates && (
-            <ErrorMessage>Please click the exact room location on the map.</ErrorMessage>
+            <ErrorMessage>
+              Please click the exact room location on the map.
+            </ErrorMessage>
           )}
         </FormSection>
 

@@ -13,7 +13,9 @@ export const ListingCard = styled(motion.div)`
   overflow: hidden;
   border: 1px solid ${({ theme }) => theme.border};
   box-shadow: 0 14px 34px ${({ theme }) => theme.boxShadow};
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 
   &:hover {
     transform: translateY(-2px);
@@ -24,7 +26,8 @@ export const ListingCard = styled(motion.div)`
 export const ListingImage = styled.div`
   width: 100%;
   height: 210px;
-  background: linear-gradient(
+  background:
+    linear-gradient(
       135deg,
       ${({ theme }) => theme.primary}20,
       ${({ theme }) => theme.accent}20

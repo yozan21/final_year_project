@@ -12,7 +12,8 @@ const Wrapper = styled.div`
   padding: clamp(1rem, 5vw, 5rem);
   background:
     linear-gradient(90deg, rgba(33, 23, 19, 0.82), rgba(33, 23, 19, 0.28)),
-    url("https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=1200&auto=format&fit=crop") center/cover no-repeat;
+    url("https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=1200&auto=format&fit=crop")
+      center/cover no-repeat;
 
   @media (max-width: 900px) {
     grid-template-columns: 1fr;

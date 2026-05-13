@@ -120,7 +120,7 @@ const MyListings = () => {
   ];
 
   const listings = rooms?.filter(
-    (room) => activeFilter === "all" || room.status === activeFilter
+    (room) => activeFilter === "all" || room.status === activeFilter,
   );
 
   const handleView = (id) => {

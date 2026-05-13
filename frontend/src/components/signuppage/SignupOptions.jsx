@@ -41,7 +41,9 @@ const OptionCard = styled.div`
   flex-direction: column;
   align-items: center;
   border: 1px solid var(--border);
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
   &:hover {
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.16);
     transform: translateY(-6px) scale(1.03);
@@ -81,7 +83,9 @@ const OptionButton = styled.button`
   padding: 0.85rem 2.2rem;
   cursor: pointer;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  transition: background 0.2s, transform 0.2s;
+  transition:
+    background 0.2s,
+    transform 0.2s;
   &:hover {
     background: ${({ theme }) => theme.primaryDark};
     transform: translateY(-2px) scale(1.04);
@@ -98,9 +102,15 @@ const SignupOptions = () => {
           <FiKey size={34} color="var(--primary)" />
           <CardTitle>Sign up as User</CardTitle>
           <CardList>
-            <li><FiShield /> Find verified rooms faster</li>
-            <li><FiHome /> Compare prices, areas, and amenities</li>
-            <li><FiKey /> Manage bookings in one place</li>
+            <li>
+              <FiShield /> Find verified rooms faster
+            </li>
+            <li>
+              <FiHome /> Compare prices, areas, and amenities
+            </li>
+            <li>
+              <FiKey /> Manage bookings in one place
+            </li>
           </CardList>
           <OptionButton onClick={() => navigate("/signup/user")}>
             Sign up as User
@@ -110,9 +120,15 @@ const SignupOptions = () => {
           <FiHome size={34} color="var(--primary)" />
           <CardTitle>Sign up as Landlord</CardTitle>
           <CardList>
-            <li><FiHome /> List rooms with stronger details</li>
-            <li><FiShield /> Build trust with renter-ready info</li>
-            <li><FiKey /> Manage booking interest from dashboard</li>
+            <li>
+              <FiHome /> List rooms with stronger details
+            </li>
+            <li>
+              <FiShield /> Build trust with renter-ready info
+            </li>
+            <li>
+              <FiKey /> Manage booking interest from dashboard
+            </li>
           </CardList>
           <OptionButton onClick={() => navigate("/signup/landlord")}>
             Sign up as Landlord

@@ -38,7 +38,9 @@ const TestimonialCard = styled(motion.div)`
   flex-direction: column;
   align-items: flex-start;
   position: relative;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
   &:hover {
     box-shadow: 0 18px 44px ${({ theme }) => theme.boxShadowHover};
     transform: translateY(-4px);

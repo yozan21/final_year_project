@@ -85,7 +85,9 @@ const NotificationItem = styled(motion.div)`
   padding: 1.5rem;
   border: 1px solid ${({ theme }) => theme.border};
   box-shadow: 0 14px 34px ${({ theme }) => theme.boxShadow};
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   cursor: pointer;
 
   &:hover {
@@ -270,7 +272,7 @@ const Notifications = () => {
 
   const filteredNotifications = notifications.filter(
     (notification) =>
-      activeFilter === "all" || notification.type === activeFilter
+      activeFilter === "all" || notification.type === activeFilter,
   );
 
   const unreadCount = notifications.filter((n) => n.unread).length;
@@ -278,20 +280,20 @@ const Notifications = () => {
   const markAsRead = (id) => {
     setNotifications((prev) =>
       prev.map((notification) =>
-        notification.id === id ? { ...notification, seen: true } : notification
-      )
+        notification.id === id ? { ...notification, seen: true } : notification,
+      ),
     );
   };
 
   const markAllAsRead = () => {
     setNotifications((prev) =>
-      prev.map((notification) => ({ ...notification, seen: true }))
+      prev.map((notification) => ({ ...notification, seen: true })),
     );
   };
 
   const deleteNotification = (id) => {
     setNotifications((prev) =>
-      prev.filter((notification) => notification.id !== id)
+      prev.filter((notification) => notification.id !== id),
     );
   };
 

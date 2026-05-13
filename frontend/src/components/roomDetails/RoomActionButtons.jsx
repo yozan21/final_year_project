@@ -32,7 +32,7 @@ function RoomActionButtons({ role, status, id }) {
 
   const handleClick = (id) => {
     openModal(
-      <PerformAction id={id} operation={deleteRoom} actionType="delete" />
+      <PerformAction id={id} operation={deleteRoom} actionType="delete" />,
     );
   };
 

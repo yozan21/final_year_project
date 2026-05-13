@@ -74,7 +74,7 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 //Virtuals
@@ -117,7 +117,7 @@ userSchema.pre(/^find/, function (next) {
 
 userSchema.methods.isCorrectPassword = async function (
   candidatePassword,
-  userPassword
+  userPassword,
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };

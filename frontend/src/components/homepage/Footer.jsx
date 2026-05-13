@@ -219,15 +219,22 @@ const Footer = () => (
       <FooterCol>
         <h4>Quick Links</h4>
         <FooterLinks>
-          <a href="/explore">Explore <FiArrowRight /></a>
-          <a href="/login">Login <FiArrowRight /></a>
-          <a href="/signup">Sign Up <FiArrowRight /></a>
+          <a href="/explore">
+            Explore <FiArrowRight />
+          </a>
+          <a href="/login">
+            Login <FiArrowRight />
+          </a>
+          <a href="/signup">
+            Sign Up <FiArrowRight />
+          </a>
         </FooterLinks>
       </FooterCol>
     </FooterGrid>
     <Hr />
     <FooterBottom>
-      &copy; {new Date().getFullYear()} GharSajilo. All rights reserved. Made in Nepal.
+      &copy; {new Date().getFullYear()} GharSajilo. All rights reserved. Made in
+      Nepal.
     </FooterBottom>
   </FooterWrap>
 );

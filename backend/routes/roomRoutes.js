@@ -20,7 +20,7 @@ router
     roomController.resizeUploadedRoomImages,
     roomController.normalizeRoomLocation,
     roomController.getLandlordId,
-    roomController.createRoom
+    roomController.createRoom,
   );
 
 router
@@ -31,17 +31,17 @@ router
     roomController.uploadRoomImages,
     roomController.updateRoomImages,
     roomController.normalizeRoomLocation,
-    roomController.updateRoom
+    roomController.updateRoom,
   )
   .delete(
     authController.restrictTo("landlord", "admin"),
-    roomController.deleteRoom
+    roomController.deleteRoom,
   );
 
 router.patch(
   "/:id/updateRoomStatus",
   authController.restrictTo("landlord", "admin"),
-  roomController.updateRoomStatus
+  roomController.updateRoomStatus,
 );
 
 export default router;

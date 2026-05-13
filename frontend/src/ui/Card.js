@@ -6,7 +6,10 @@ export const Card = styled.div`
   border-radius: 8px;
   box-shadow: 0 14px 34px var(--boxShadow);
   padding: 1.2rem;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
   min-height: 380px;
   &:hover {
     border-color: var(--primary);

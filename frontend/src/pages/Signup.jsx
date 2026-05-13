@@ -8,8 +8,11 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background:
-    linear-gradient(135deg, ${({ theme }) => theme.background}, ${({ theme }) => theme.surfaceAlt});
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.background},
+    ${({ theme }) => theme.surfaceAlt}
+  );
   padding: clamp(1rem, 4vw, 4rem);
 `;
 
