@@ -16,6 +16,7 @@ import RoomActionButtons from "../components/roomDetails/RoomActionButtons";
 import Error from "../ui/Error";
 import RoomLocationMap from "../features/location/RoomLocationMap";
 import { formatStructuredLocation } from "../features/location/locationUtils";
+import RoomDetailsSkeleton from "../ui/RoomDetailsSkeleton";
 
 const Page = styled.div`
   max-width: 1240px;
@@ -68,12 +69,7 @@ const RoomDetails = () => {
 
   const { room, isPending: isLoadingRoom, isError, error } = useRoom(id);
   const { role, isPending: isLoadingUser } = useUser();
-  if (isLoadingRoom || isLoadingUser)
-    return (
-      <SpinnerContainer>
-        <Spinner />
-      </SpinnerContainer>
-    );
+  if (isLoadingRoom || isLoadingUser) return <RoomDetailsSkeleton />;
 
   if (isError) return <Error error={error} />;
 

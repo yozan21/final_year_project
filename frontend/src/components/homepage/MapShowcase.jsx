@@ -44,7 +44,8 @@ const Label = styled.span`
 `;
 
 const Heading = styled.h2`
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(1rem, 4vw, 2.3rem);
+  font-weight: 600;
   line-height: 1.1;
   color: ${({ theme }) => theme.text};
   margin: 0;
@@ -55,9 +56,8 @@ const Heading = styled.h2`
 `;
 
 const Desc = styled.p`
-  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
-  color: ${({ theme }) => theme.textSecondary};
-  line-height: 1.75;
+  color: ${({ theme }) => theme.mutedText};
+  line-height: 1.7;
   max-width: 440px;
   margin: 0;
 `;
@@ -197,7 +197,7 @@ const MapShowcase = () => {
           Find rooms by <span>location</span>, not just listing
         </Heading>
         <Desc>
-          Our interactive map puts every verified room on the map — so you can
+          Our interactive map puts every verified room on the map so you can
           judge the neighbourhood, commute, and surroundings before ever
           stepping inside.
         </Desc>

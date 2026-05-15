@@ -64,6 +64,33 @@ const pinIcon = L.divIcon({
   popupAnchor: [0, -40],
 });
 
+const userLocationIcon = L.divIcon({
+  className: "",
+  html: `
+    <div style="position:relative; width:18px; height:18px;">
+      <div id="user-pulse" style="
+        position: absolute; inset: -6px; border-radius: 50%;
+        background: rgba(254, 98, 24, 0.25);
+        animation: pulse 1.4s ease-out 4;
+      "></div>
+      <div style="
+        width: 18px; height: 18px; border-radius: 50%;
+        background: #FE6218; border: 3px solid white;
+        box-shadow: 0 2px 12px rgba(254,98,24,0.45);
+        position: relative; z-index: 1;
+      "></div>
+    </div>
+    <style>
+      @keyframes pulse {
+        0% { transform: scale(1); opacity: 0.8; }
+        100% { transform: scale(2.8); opacity: 0; }
+      }
+    </style>
+  `,
+  iconSize: [18, 18],
+  iconAnchor: [9, 9],
+});
+
 const getRoomId = (room) => room.id || room._id;
 const getRoomPosition = (room) => {
   const coordinates = room?.geoLocation?.coordinates;
@@ -103,13 +130,20 @@ function Recenter({ center }) {
   const map = useMap();
 
   useEffect(() => {
-    if (center?.length === 2) map.setView(center, 13);
+    if (center?.length === 2) map.setView(center, 10);
   }, [center, map]);
 
   return null;
 }
 
-function ListingMap({ rooms = [], center, onBoundsChange, height, minHeight }) {
+function ListingMap({
+  rooms = [],
+  center,
+  onBoundsChange,
+  height,
+  minHeight,
+  userLocation,
+}) {
   const navigate = useNavigate();
   const mapCenter = center || NEPAL_CENTER;
 
@@ -118,6 +152,7 @@ function ListingMap({ rooms = [], center, onBoundsChange, height, minHeight }) {
   useEffect(() => {
     if (rooms?.length) setVisibleRooms(rooms); // only replace when new data arrives
   }, [rooms]);
+  // console.log(mapCenter);
 
   return (
     <MapWrap $height={height} $minHeight={minHeight}>
@@ -131,6 +166,7 @@ function ListingMap({ rooms = [], center, onBoundsChange, height, minHeight }) {
         {visibleRooms.map((room) => {
           const position = getRoomPosition(room);
           if (!position) return null;
+          console.log(position);
           return (
             <Marker key={getRoomId(room)} position={position} icon={pinIcon}>
               <Popup>
@@ -154,6 +190,9 @@ function ListingMap({ rooms = [], center, onBoundsChange, height, minHeight }) {
             </Marker>
           );
         })}
+        {userLocation && (
+          <Marker position={userLocation} icon={userLocationIcon}></Marker>
+        )}
       </MapContainer>
     </MapWrap>
   );

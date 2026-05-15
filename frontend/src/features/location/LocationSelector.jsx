@@ -32,7 +32,8 @@ const Select = styled.select`
   border: 1px solid ${({ theme }) => theme.border};
   background: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.text};
-  font: inherit;
+  font-size: inherit;
+  font-weight: 500;
 
   &:focus {
     outline: none;
@@ -47,7 +48,8 @@ const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.border};
   background: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.text};
-  font: inherit;
+  font-size: inherit;
+  font-weight: 500;
 
   &:focus {
     outline: none;
@@ -56,7 +58,12 @@ const Input = styled.input`
   }
 `;
 
-function LocationSelector({ value, onChange, compact = false, required = false }) {
+function LocationSelector({
+  value,
+  onChange,
+  compact = false,
+  required = false,
+}) {
   const current = value || {};
   const provinceOptions = getProvinces();
   const districtOptions = getDistricts(current.provinceId);
@@ -98,7 +105,11 @@ function LocationSelector({ value, onChange, compact = false, required = false }
         <Select
           value={current.districtId || ""}
           onChange={(event) =>
-            update({ districtId: event.target.value, localLevelId: "", ward: "" })
+            update({
+              districtId: event.target.value,
+              localLevelId: "",
+              ward: "",
+            })
           }
           disabled={!current.provinceId}
           required={required}
@@ -116,7 +127,9 @@ function LocationSelector({ value, onChange, compact = false, required = false }
         Municipality / Rural Municipality{required ? " *" : ""}
         <Select
           value={current.localLevelId || ""}
-          onChange={(event) => update({ localLevelId: event.target.value, ward: "" })}
+          onChange={(event) =>
+            update({ localLevelId: event.target.value, ward: "" })
+          }
           disabled={!current.districtId}
           required={required}
         >

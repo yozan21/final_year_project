@@ -20,7 +20,7 @@ function ProtectedRoute({ children }) {
     function () {
       if (!isAuthenticated && !isPending) navigate("/login");
     },
-    [isAuthenticated, navigate, isPending]
+    [isAuthenticated, navigate, isPending],
   );
   if (isPending)
     return (

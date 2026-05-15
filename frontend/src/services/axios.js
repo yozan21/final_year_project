@@ -53,6 +53,8 @@ api.interceptors.response.use(
         router.navigate("/");
         // Handles refresh failure safely without looping
         return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
       }
     }
     return Promise.reject(error);

@@ -370,6 +370,7 @@ const RoomGrid = ({ filters, setFilters }) => {
           onBoundsChange={setBounds}
           height="460px"
           minHeight="460px"
+          userLocation={isNearMe ? center : null}
         />
         {!isNearMe && (
           <MapLink onClick={handleFindNearMe} disabled={locating}>

@@ -32,14 +32,18 @@ const Header = styled.div`
 
 function ExploreMap() {
   const [center, setCenter] = useState(NEPAL_CENTER);
+  const [isNearMe, setIsNearMe] = useState(false);
   const [bounds, setBounds] = useState(null);
   const debouncedBounds = useDebouncedValue(bounds, 650);
   const { rooms } = useRoomsInBounds(debouncedBounds, {});
 
   useEffect(() => {
     navigator.geolocation?.getCurrentPosition(
-      (position) =>
-        setCenter([position.coords.latitude, position.coords.longitude]),
+      (position) => {
+        setCenter([position.coords.latitude, position.coords.longitude]);
+        setIsNearMe(true);
+      },
+
       () => setCenter(NEPAL_CENTER),
       { enableHighAccuracy: true, timeout: 7000 },
     );
@@ -57,6 +61,7 @@ function ExploreMap() {
         onBoundsChange={setBounds}
         height="100%"
         minHeight="620px"
+        userLocation={isNearMe ? center : null}
       />
     </Page>
   );

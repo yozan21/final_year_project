@@ -30,7 +30,8 @@ const Header = styled.div`
   padding: 0 1rem;
 
   h2 {
-    font-size: clamp(2rem, 4vw, 3.6rem);
+    font-size: clamp(1rem, 4vw, 2.3rem);
+    font-weight: 600;
     line-height: 1.05;
     margin-bottom: 0.7rem;
     color: ${({ theme }) => theme.text};

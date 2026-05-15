@@ -36,7 +36,7 @@ function RoomLocationMap({ room }) {
 
   return (
     <MapWrap>
-      <MapContainer center={[lat, lng]} zoom={15} scrollWheelZoom={false}>
+      <MapContainer center={[lat, lng]} zoom={15} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

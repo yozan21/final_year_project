@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { refreshTokenURL } from "../services/apiEndpoints";
 
 export const useInitAuth = () => {
   const [isReady, setIsReady] = useState(false);
@@ -8,7 +9,7 @@ export const useInitAuth = () => {
     const init = async () => {
       try {
         await axios.post(
-          "http://localhost:3210/api/v1/user/refresh",
+          refreshTokenURL,
           {},
           {
             withCredentials: true,

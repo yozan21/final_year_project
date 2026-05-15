@@ -2,13 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { rooms, users } from "../../data/mockData";
 import { motion } from "framer-motion";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaChevronRight } from "react-icons/fa";
 import { FiCheckCircle, FiMapPin, FiWifi } from "react-icons/fi";
 import { Section, H2, H3, Card } from "../../ui";
 import RoomImg from "../../ui/RoomImg";
 import CardContent from "../../ui/CardContent";
 import DetailsBtn from "../../ui/Details";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import formatCurrency from "../../utils/formatCurrency";
 
 const FeaturedGrid = styled.div`
@@ -18,12 +18,30 @@ const FeaturedGrid = styled.div`
 `;
 
 const SectionHeader = styled.div`
-  max-width: 720px;
   margin-bottom: 1.6rem;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   p {
     color: ${({ theme }) => theme.mutedText};
     line-height: 1.7;
+  }
+`;
+
+const ViewMoreLink = styled(Link)`
+  justify-self: flex-end;
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.primary};
+  transition: all 0.2s ease-in;
+  &:hover {
+    text-decoration: underline;
+
+    & svg {
+      transform: translateX(2px);
+      transition: inherit;
+    }
   }
 `;
 
@@ -83,11 +101,16 @@ const FeaturedRooms = () => {
   return (
     <Section style={{ padding: "4.5rem clamp(1rem, 5vw, 5rem)" }}>
       <SectionHeader>
-        <H2 style={{ marginBottom: "0.6rem" }}>Rooms Worth Visiting</H2>
-        <p>
-          A polished first look at homes with the practical details Nepali
-          renters ask about before calling.
-        </p>
+        <div>
+          <H2 style={{ marginBottom: "0.6rem" }}>Rooms Worth Visiting</H2>
+          <p>
+            A polished first look at homes with the practical details Nepali
+            renters ask about before calling.
+          </p>
+        </div>
+        <ViewMoreLink to="/explore">
+          See more <FaChevronRight />
+        </ViewMoreLink>
       </SectionHeader>
       <FeaturedGrid>
         {featuredRooms.map((room) => {
@@ -134,9 +157,7 @@ const FeaturedRooms = () => {
                 </p>
                 <ChipRow>
                   {room.amenities?.slice(0, 4).map((amenity) => (
-                    <Chip key={amenity}>
-                      <FiWifi /> {amenity}
-                    </Chip>
+                    <Chip key={amenity}>{amenity}</Chip>
                   ))}
                 </ChipRow>
                 <div style={{ flex: 1 }} />
