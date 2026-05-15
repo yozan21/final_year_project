@@ -10,8 +10,7 @@ export const rooms = [
     availableFrom: "2025/07/28",
     landlordId: 1,
     amenities: ["WiFi", "Parking", "24/7 Water", "Furnished"],
-    thumbnail:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+    thumbnail: "./images/featured-1.png",
     images: [
       "/images/cozy-studio-1.png",
       "/images/cozy-studio-2.png",
@@ -35,14 +34,14 @@ export const rooms = [
     title: "Flat near Lakeside",
     location: "Pokhara",
     area: "Lakeside",
-    price: 32000,
+    price: 22000,
     type: "2bhk",
     availableFrom: "2025/07/28",
     description:
       "A bright and compact studio apartment located in the heart of the city. Features modern furnishings, a fully equipped kitchenette, and large windows that let in plenty of natural light. Perfect for solo travelers or professionals seeking convenience and style.",
     landlordId: 2,
     amenities: ["WiFi", "Lake View", "Backup Power"],
-    thumbnail: "https://images.unsplash.com/photo-1600585154103-761f1d3d44a4",
+    thumbnail: "./images/featured-2.png",
     images: [
       "https://images.unsplash.com/photo-3",
       "https://images.unsplash.com/photo-4",
@@ -61,12 +60,12 @@ export const rooms = [
     title: "Budget Room in Biratnagar",
     location: "Biratnagar",
     area: "Main Road",
-    price: 12000,
+    price: 20000,
     type: "3bhk",
     availableFrom: "2025/07/28",
     landlordId: 6,
     amenities: ["Fan", "Shared Bathroom", "WiFi", "Pets allowed"],
-    thumbnail: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914",
+    thumbnail: "./images/featured-3.png",
     images: [
       "https://images.unsplash.com/photo-5",
       "https://images.unsplash.com/photo-6",

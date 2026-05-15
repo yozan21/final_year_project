@@ -34,7 +34,13 @@ const Hint = styled.p`
 
 const pinIcon = L.divIcon({
   className: "",
-  html: `<div style="width:34px;height:34px;border-radius:999px;background:#FE6218;border:3px solid white;box-shadow:0 12px 24px rgba(254,98,24,.35);"></div>`,
+  html: `
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">
+      <path d="M16 0C7.163 0 0 7.163 0 16c0 10 16 24 16 24S32 26 32 16C32 7.163 24.837 0 16 0z"
+        fill="#FE6218" stroke="white" stroke-width="2"/>
+      <circle cx="16" cy="16" r="6" fill="white"/>
+    </svg>
+  `,
   iconSize: [34, 34],
   iconAnchor: [17, 17],
 });

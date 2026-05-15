@@ -4,6 +4,7 @@ import { promisify } from "util";
 
 import User from "../models/UserModel.js";
 import AppError from "../utils/AppError.js";
+import AuthError from "../utils/AuthError.js";
 
 const signAccessToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -11,7 +12,7 @@ const signAccessToken = (id) =>
   });
 
 const signRefreshToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_REFRESH_SECRET, {
+  jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
   });
 
@@ -19,21 +20,32 @@ const createSendToken = (user, code, req, res) => {
   const accessToken = signAccessToken(user.id);
   const refreshToken = signRefreshToken(user.id);
 
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
-    maxAge:
-      Number.parseInt(process.env.JWT_COOKIE_EXPIRES_IN) * 24 * 60 * 60 * 1000, // 7 days
-  });
-
   user.password = undefined;
 
-  res.status(code).json({
-    status: "success",
-    token: accessToken, // renamed from token
-    data: { user },
-  });
+  return res
+    .status(code)
+    .cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge:
+        Number.parseInt(process.env.JWT_ACCESS_COOKIE_EXPIRES_IN) * 60 * 1000, // 7 days
+    })
+    .cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge:
+        Number.parseInt(process.env.JWT_REFRESH_COOKIE_EXPIRES_IN) *
+        24 *
+        60 *
+        60 *
+        1000, // 7 days
+    })
+    .json({
+      status: "success",
+      data: { user },
+    });
 };
 
 export const signup = asyncHandler(async (req, res, next) => {
@@ -65,31 +77,37 @@ export const login = asyncHandler(async (req, res, next) => {
 
 export const refresh = asyncHandler(async (req, res, next) => {
   const token = req.cookies.refreshToken;
-  if (!token) return next(new AppError("No refresh token", 401)); // 403 not 401
+  if (!token) return next(new AuthError("No refresh token", 403)); // 403 not 401
 
   try {
-    const decoded = await promisify(jwt.verify)(
-      token,
-      process.env.JWT_REFRESH_SECRET,
-    );
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
-    if (!user) return next(new AppError("User no longer exists!", 401));
+    if (!user) return next(new AuthError("User no longer exists!", 403));
 
     const accessToken = signAccessToken(user.id);
-    res.json({ accessToken });
+    res
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge:
+          Number.parseInt(process.env.JWT_ACCESS_COOKIE_EXPIRES_IN) * 60 * 1000, // 15 mins
+      })
+      .json({ message: "Token Refreshed" });
   } catch (err) {
-    return next(new AppError("Invalid or expired refresh token", 401));
+    return next(new AuthError("Invalid or expired refresh token", 403));
   }
 });
 
 export const protect = asyncHandler(async (req, res, next) => {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
-  }
+  let token = req.cookies.accessToken;
+  // if (
+  //   req.headers.authorization &&
+  //   req.headers.authorization.startsWith("Bearer")
+  // ) {
+  //   token = req.headers.authorization.split(" ")[1];
+  // }
+  // console.log(req.cookies);
 
   if (!token) {
     return next(new AppError("You are not logged in!", 401));
@@ -130,5 +148,17 @@ export const restrictTo =
   };
 
 export const logout = (req, res) => {
-  res.status(200).json({ status: "success" });
+  res
+    .status(200)
+    .clearCookie("accessToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    })
+    .clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    })
+    .json({ status: "success" });
 };

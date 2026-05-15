@@ -8,6 +8,8 @@ export const useUser = () => {
       return await getCurrentUserApi();
     },
     // enabled: !!token,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     retry: false,
   });
 

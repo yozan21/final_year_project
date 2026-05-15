@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useModal } from "../../hooks/useModal";
+import Lightbox from "./Lightbox";
 
 const GalleryWrapper = styled.div`
   margin-bottom: 1.2rem;
@@ -9,12 +9,17 @@ const GalleryWrapper = styled.div`
 const ImageRow = styled.div`
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr;
-  grid-auto-rows: 180px;
+  grid-template-rows: 240px;
   gap: 0.75rem;
 
   @media (max-width: 780px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 180px;
+  }
+
+  @media (max-width: 500px) {
     grid-template-columns: 1fr;
-    grid-auto-rows: 220px;
+    grid-template-rows: 220px;
   }
 `;
 
@@ -27,74 +32,83 @@ const Image = styled.img`
   transition: transform 0.2s ease;
   border: 1px solid ${({ theme }) => theme.border};
 
-  &:first-child {
-    grid-row: span 2;
-  }
-
   &:hover {
     transform: scale(1.01);
   }
 `;
 
-const Button = styled.button`
-  padding: 10px 18px;
-  height: 44px;
-  align-self: center;
-  background-color: ${({ theme }) => theme.primary};
-  color: white;
-  border: none;
+const MoreOverlay = styled.div`
+  position: relative;
   border-radius: 8px;
+  overflow: hidden;
   cursor: pointer;
-  font-weight: 500;
-  margin-top: ${({ top }) => (top ? "12px" : "0")};
-  font-size: 14px;
+  border: 1px solid ${({ theme }) => theme.border};
+  height: 100%;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.primaryDark};
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
-`;
 
-const PreviewImage = styled.img`
-  max-width: min(900px, 92vw);
-  max-height: 80vh;
-  object-fit: contain;
-  border-radius: 8px;
+  &::after {
+    content: "+ ${({ $count }) => $count} more";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const getPhotoSrc = (photo) => (typeof photo === "string" ? photo : photo?.url);
 
 const RoomGallery = ({ photos }) => {
-  const { openModal } = useModal();
-  const [showAll, setShowAll] = useState(false);
-  const visiblePhotos = showAll ? photos : photos?.slice(0, 3);
+  const [lightboxIndex, setLightboxIndex] = useState(null);
+  const srcs = (photos || []).map(getPhotoSrc);
+  const visible = srcs.slice(0, 3);
+  const remaining = srcs.length - 3;
 
-  const handleClick = (e) => {
-    const tag = e.target.tagName.toLowerCase();
-    if (tag === "img") {
-      const src = e.target.getAttribute("src");
-      openModal(<PreviewImage src={src} />);
-    }
-  };
   return (
     <GalleryWrapper>
-      <ImageRow onClick={handleClick}>
-        {visiblePhotos?.map((photo, idx) => (
-          <Image
-            key={idx}
-            src={getPhotoSrc(photo)}
-            alt={`Room photo ${idx + 1}`}
-          />
-        ))}
+      <ImageRow>
+        {visible.map((src, idx) => {
+          const isLast = idx === 2 && remaining > 0;
 
-        {!showAll && photos?.length > 3 && (
-          <Button onClick={() => setShowAll(true)}>View More</Button>
-        )}
+          if (isLast) {
+            return (
+              <MoreOverlay
+                key={idx}
+                $count={remaining}
+                onClick={() => setLightboxIndex(idx)}
+              >
+                <img src={src} alt="more photos" />
+              </MoreOverlay>
+            );
+          }
+
+          return (
+            <Image
+              key={idx}
+              src={src}
+              alt={`Room photo ${idx + 1}`}
+              onClick={() => setLightboxIndex(idx)}
+            />
+          );
+        })}
       </ImageRow>
 
-      {showAll && photos.length > 3 && (
-        <Button top onClick={() => setShowAll(false)}>
-          Show Less
-        </Button>
+      {lightboxIndex !== null && (
+        <Lightbox
+          photos={srcs}
+          startIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
       )}
     </GalleryWrapper>
   );

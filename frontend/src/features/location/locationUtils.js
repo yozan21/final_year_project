@@ -3,7 +3,7 @@ import districts from "../../data/nepal/districts.json";
 import localLevels from "../../data/nepal/localLevels.json";
 import localLevelTypes from "../../data/nepal/localLevelTypes.json";
 
-export const NEPAL_CENTER = [28.3949, 84.124];
+export const NEPAL_CENTER = [27.7103, 85.3222];
 export const NEPAL_BOUNDS = {
   south: 26.347,
   north: 30.447,
@@ -12,7 +12,7 @@ export const NEPAL_BOUNDS = {
 };
 
 const typeById = new Map(
-  localLevelTypes.map((type) => [type.local_level_type_id, type.name])
+  localLevelTypes.map((type) => [type.local_level_type_id, type.name]),
 );
 
 export function isInsideNepal(lat, lng) {
@@ -30,7 +30,9 @@ export function getProvinces() {
 
 export function getDistricts(provinceId) {
   if (!provinceId) return [];
-  return districts.filter((district) => district.province_id === Number(provinceId));
+  return districts.filter(
+    (district) => district.province_id === Number(provinceId),
+  );
 }
 
 export function getLocalLevels(districtId) {
@@ -48,10 +50,14 @@ export function getWards() {
 }
 
 export function getLocationNameByIds(value) {
-  const province = provinces.find((item) => item.province_id === Number(value?.provinceId));
-  const district = districts.find((item) => item.district_id === Number(value?.districtId));
+  const province = provinces.find(
+    (item) => item.province_id === Number(value?.provinceId),
+  );
+  const district = districts.find(
+    (item) => item.district_id === Number(value?.districtId),
+  );
   const localLevel = localLevels.find(
-    (item) => item.municipality_id === Number(value?.localLevelId)
+    (item) => item.municipality_id === Number(value?.localLevelId),
   );
 
   return {

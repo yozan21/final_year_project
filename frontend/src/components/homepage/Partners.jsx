@@ -100,7 +100,7 @@ const Track = styled(motion.div)`
 
 const Partner = styled.div`
   border: 1px solid ${({ theme }) => theme.border};
-  background: ${({ theme }) => theme.surfaceAlt};
+  background: white;
   border-radius: 8px;
   padding: 1rem 1.3rem;
   text-align: center;

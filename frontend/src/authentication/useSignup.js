@@ -3,7 +3,6 @@ import { signupApi } from "../services/apiAuth";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { setToken } from "../hooks/tokenStore";
 
 export const useSignup = () => {
   const [fieldErrors, setFieldErrors] = useState();
@@ -33,7 +32,6 @@ export const useSignup = () => {
       }),
     onSuccess: (user) => {
       queryClient.setQueryData(["user"], user.data.user);
-      setToken(user.token);
       navigate(user.data.user.role === "client" ? "/" : "/landlord-dashboard");
       toast.success(`Signed up as ${user.data.user.role}. Welcome!!`);
     },

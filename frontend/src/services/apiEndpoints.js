@@ -6,6 +6,8 @@ export const signupURL = `${URL}user/signup`;
 export const logoutURL = `${URL}user/logout`;
 export const currentUserURL = `${URL}user/me`;
 
+export const refreshTokenURL = `${URL}user/refresh`;
+
 export const getRoomsURL = `${URL}rooms/`;
 export const getRoomURL = `${URL}rooms/id`;
 

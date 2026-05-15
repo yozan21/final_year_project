@@ -41,6 +41,7 @@ import { useModal } from "../../hooks/useModal";
 import PerformAction from "../../ui/PerformAction";
 import { useDeleteRoom } from "./useDeleteRoom";
 import DashboardSkeleton from "./DashboardSkeleton";
+import ListingSkeleton from "./ListingSkeleton";
 
 const OverviewContainer = styled.div`
   max-width: 1240px;
@@ -254,7 +255,7 @@ const DashboardOverview = () => {
           </button>
         </SectionHeader>
         {isLoadingRooms || isDeletingRoom ? (
-          <Spinner />
+          <ListingSkeleton />
         ) : (
           <ListingsGrid>
             {!recentListings?.length ? (

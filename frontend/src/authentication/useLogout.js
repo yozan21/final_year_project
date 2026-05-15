@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { logoutApi } from "../services/apiAuth";
-import { clearToken } from "../hooks/tokenStore";
 
 export function useLogout() {
   const queryClient = useQueryClient();
@@ -10,13 +9,10 @@ export function useLogout() {
   const { mutate: logout, isPending } = useMutation({
     mutationFn: logoutApi,
     onSuccess: () => {
-      // Clear token
-      clearToken();
-      localStorage.removeItem("auth-token");
-
       // Update auth-related cache without forcing a full page reload.
       queryClient.setQueryData(["user"], null);
       queryClient.removeQueries({ queryKey: ["rooms"] });
+      queryClient.clear();
 
       // Redirect
       navigate("/login", { replace: true });

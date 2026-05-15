@@ -260,9 +260,11 @@ const RoomGrid = ({ filters, setFilters }) => {
   const [center, setCenter] = useState(NEPAL_CENTER);
   const [bounds, setBounds] = useState(null);
   const debouncedBounds = useDebouncedValue(bounds, 650);
-  const { mapRooms } = useRoomsInBounds(debouncedBounds, {});
+  const { rooms: mapRooms } = useRoomsInBounds(debouncedBounds, {});
   const [locating, setLocating] = useState(false);
   const [isNearMe, setIsNearMe] = useState(false);
+
+  // console.log(mapRooms);
 
   const handleFindNearMe = () => {
     setLocating(true);

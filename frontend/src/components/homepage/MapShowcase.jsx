@@ -226,7 +226,7 @@ const MapShowcase = () => {
           as={motion.button}
           whileHover={{ scale: 1.06 }}
           style={{ fontSize: "1rem", marginTop: "0.5rem" }}
-          onClick={() => navigate("/explore")}
+          onClick={() => navigate("/explore-map")}
         >
           <FiMapPin style={{ marginRight: 8 }} /> Explore on Map
         </Button>

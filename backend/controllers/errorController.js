@@ -46,6 +46,19 @@ const handleJWTExpiredError = () =>
 
 const sendDevError = (err, req, res) => {
   //API Error
+  if (err.clearAuthCookies) {
+    res
+      .clearCookie("accessToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+      })
+      .clearCookie("accessToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+      });
+  }
   console.log(`Error💥: ${err}`);
   return res.status(err.statusCode).json({
     status: err.status,
@@ -57,6 +70,19 @@ const sendDevError = (err, req, res) => {
 };
 const sendProdError = (err, req, res) => {
   //API Error
+  if (err.clearAuthCookies) {
+    res
+      .clearCookie("accessToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+      })
+      .clearCookie("accessToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+      });
+  }
   if (req.originalUrl.startsWith("/api")) {
     if (err.isOperational) {
       // Operational, trusted error: send message to client

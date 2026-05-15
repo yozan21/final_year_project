@@ -322,32 +322,6 @@ export default function EditRoom() {
             </FormGroup>
 
             <FormGroup>
-              <Label>Location *</Label>
-              <Input
-                {...register("location", {
-                  required: "Location is required",
-                })}
-                placeholder="e.g., Kathmandu, Pokhara"
-                hasError={!!errors.location}
-              />
-              {errors.location && (
-                <ErrorMessage>{errors.location.message}</ErrorMessage>
-              )}
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Area *</Label>
-              <Input
-                {...register("area", { required: "Area is required" })}
-                placeholder="e.g., Thamel, Lakeside"
-                hasError={!!errors.area}
-              />
-              {errors.area && (
-                <ErrorMessage>{errors.area.message}</ErrorMessage>
-              )}
-            </FormGroup>
-
-            <FormGroup>
               <Label>Price per Month (Rs)*</Label>
               <Input
                 type="number"
