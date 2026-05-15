@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import AppError from "../utils/AppError.js";
 import { deleteRoomImages } from "./roomController.js";
+import mongoose from "mongoose";
 
 export const getAll = (Model) =>
   asyncHandler(async (req, res, next) => {
@@ -47,6 +48,9 @@ export const getAll = (Model) =>
 
 export const getOne = (Model, popOptions) =>
   asyncHandler(async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return next(new AppError("No document found with that ID", 404));
+    }
     let query = Model.findById(req.params.id);
     if (popOptions) query = query.populate(popOptions);
     if (req?.user?.role === "landlord" && Model.modelName === "User")
@@ -80,6 +84,10 @@ export const createOne = (Model) =>
 
 export const updateOne = (Model) =>
   asyncHandler(async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return next(new AppError("No document found with that ID", 404));
+    }
+
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -99,6 +107,9 @@ export const updateOne = (Model) =>
 
 export const deleteOne = (Model) =>
   asyncHandler(async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return next(new AppError("No document found with that ID", 404));
+    }
     let doc;
     if (Model.modelName === "Room" && req.user.role === "landlord") {
       doc = await Model.findOneAndDelete({

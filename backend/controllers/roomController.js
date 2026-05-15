@@ -5,6 +5,7 @@ import Room from "../models/RoomModel.js";
 import * as handlerFactory from "./handlerFactory.js";
 import asyncHandler from "express-async-handler";
 import AppError from "../utils/AppError.js";
+import mongoose from "mongoose";
 
 const multerStorage = multer.memoryStorage();
 
@@ -285,6 +286,9 @@ export const normalizeRoomLocation = (req, res, next) => {
 //   },
 // });
 export const getRoomDetails = asyncHandler(async (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return next(new AppError("No room details found", 404));
+  }
   let query =
     req.user.role === "client"
       ? Room.findOneAndUpdate(

@@ -29,6 +29,7 @@ import ClientLayout from "./ui/ClientLayout";
 import { ModalProvider } from "./context/ModelContext";
 import { Modal } from "./ui";
 import ScrollToTop from "./utils/ScrollToTop";
+import RouteError from "./ui/RouteError";
 
 export const router = createBrowserRouter([
   // Public routes
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
         <ClientLayout />
       </ModalProvider>
     ),
+    errorElement: <RouteError />,
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/login", element: <Login /> },
@@ -67,6 +69,7 @@ export const router = createBrowserRouter([
         </ProtectedRoute>
       </ModalProvider>
     ),
+    errorElement: <RouteError />,
     children: [
       { path: "/explore", element: <Explore /> },
       { path: "/explore-map", element: <ExploreMap /> },
@@ -88,6 +91,7 @@ export const router = createBrowserRouter([
         </ProtectedRoute>
       </ModalProvider>
     ),
+    errorElement: <RouteError />,
     children: [
       { index: true, element: <Navigate to="overview" replace /> },
       { path: "overview", element: <DashboardOverview /> },
@@ -111,6 +115,7 @@ export const router = createBrowserRouter([
         </ProtectedRoute>
       </ModalProvider>
     ),
+    errorElement: <RouteError />,
     children: [
       { index: true, element: <AdminOverview /> },
       { path: "overview", element: <AdminOverview /> },

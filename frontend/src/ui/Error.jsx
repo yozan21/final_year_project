@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import useNavigateBack from "../hooks/useNavigateBack";
+import { Button } from "../styles/buttons";
 
 const ErrorContainer = styled.div`
   padding: 4rem;
