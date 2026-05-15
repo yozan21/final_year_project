@@ -23,6 +23,7 @@ function Error({ error }) {
   return (
     <ErrorContainer>
       <p>{error.response.data.message}</p>
+      <span></span>
       <Button onClick={moveBack}>Go Back</Button>
     </ErrorContainer>
   );
