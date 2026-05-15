@@ -27,14 +27,14 @@ const createSendToken = (user, code, req, res) => {
     .cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
       maxAge:
         Number.parseInt(process.env.JWT_ACCESS_COOKIE_EXPIRES_IN) * 60 * 1000, // 7 days
     })
     .cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
       maxAge:
         Number.parseInt(process.env.JWT_REFRESH_COOKIE_EXPIRES_IN) *
         24 *
@@ -89,7 +89,7 @@ export const refresh = asyncHandler(async (req, res, next) => {
       .cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        sameSite: "none",
         maxAge:
           Number.parseInt(process.env.JWT_ACCESS_COOKIE_EXPIRES_IN) * 60 * 1000, // 15 mins
       })
@@ -153,12 +153,12 @@ export const logout = (req, res) => {
     .clearCookie("accessToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
     })
     .clearCookie("refreshToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
     })
     .json({ status: "success" });
 };
