@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Lightbox from "./Lightbox";
+import Lightbox from "./LightBox";
 
 const GalleryWrapper = styled.div`
   margin-bottom: 1.2rem;
